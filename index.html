@@ -1,0 +1,1474 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8fc">
+  <meta name="description" content="ResistLink AI connects communities during emergencies through intelligent need triage, local alerts, and mutual aid.">
+  <title>ResistLink AI — Stronger Together</title>
+
+  <!-- Tailwind CSS: browser-ready CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #596579;
+      --border: #e4e8f0;
+      --brand: #5546e8;
+      --brand-soft: #eeecff;
+      --danger: #b42318;
+      --warning: #854d0e;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                   BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    button, a, input, textarea, select {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible, a:focus-visible,
+    input:focus-visible, textarea:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #7c70ff;
+      outline-offset: 3px;
+    }
+
+    .surface {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .soft-shadow {
+      box-shadow: 0 5px 24px rgba(25, 36, 70, .045);
+    }
+
+    .brand-btn {
+      background: var(--brand);
+      color: white;
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+
+    .brand-btn:hover {
+      background: #4032c5;
+      box-shadow: 0 5px 16px rgba(85, 70, 232, .2);
+    }
+
+    .brand-btn:active, .action-btn:active { transform: scale(.98); }
+
+    .action-btn {
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+
+    .resource-card {
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      min-width: 0;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(25, 36, 70, .08);
+      border-color: #c8c3ff;
+    }
+
+    .priority-critical {
+      border: 1px solid #f3b5b1;
+      border-left: 5px solid #c5221f;
+      background: linear-gradient(120deg, #fff7f6, #fff 75%);
+    }
+
+    .priority-high {
+      border: 1px solid #f5d6a4;
+      border-left: 5px solid #b45309;
+      background: #fffdf8;
+    }
+
+    .priority-medium {
+      border: 1px solid #b7d5ff;
+      border-left: 5px solid #2563eb;
+      background: #f8fbff;
+    }
+
+    .priority-low {
+      border: 1px solid #b7e4ce;
+      border-left: 5px solid #15803d;
+      background: #f7fff9;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      line-height: 1.35;
+      font-weight: 750;
+      white-space: normal;
+    }
+
+    .tag {
+      background: #f0f1f7;
+      color: #394258;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #22a06b;
+      border-radius: 100%;
+      display: inline-block;
+      box-shadow: 0 0 0 3px rgba(34,160,107,.12);
+    }
+
+    .pulse {
+      animation: pulse 1.7s infinite;
+    }
+
+    @keyframes pulse {
+      50% { box-shadow: 0 0 0 7px rgba(220,38,38,0); }
+      0% { box-shadow: 0 0 0 0 rgba(220,38,38,.2); }
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #edf0f7 25%, #f8f9fc 50%, #edf0f7 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.15s infinite linear;
+      border-radius: 8px;
+    }
+
+    @keyframes shimmer {
+      to { background-position: -200% 0; }
+    }
+
+    .emergency {
+      --bg: #090909;
+      --surface: #151515;
+      --text: #fff;
+      --muted: #e5e5e5;
+      --border: #646464;
+      --brand: #ffdf00;
+      --brand-soft: #292500;
+      background: #090909;
+      color: #fff;
+    }
+
+    .emergency .brand-btn {
+      background: #ffdf00;
+      color: #090909;
+      font-weight: 850;
+    }
+
+    .emergency .brand-btn:hover { background: #ffe95c; }
+
+    .emergency .surface,
+    .emergency header,
+    .emergency footer {
+      background: #151515;
+      color: #fff;
+      border-color: #646464;
+    }
+
+    .emergency .text-gray-900,
+    .emergency .text-gray-800,
+    .emergency .text-gray-700,
+    .emergency .text-gray-600,
+    .emergency .text-gray-500,
+    .emergency .text-slate-600,
+    .emergency .text-slate-500,
+    .emergency .text-indigo-900 {
+      color: #f4f4f4 !important;
+    }
+
+    .emergency .bg-white,
+    .emergency .bg-gray-50,
+    .emergency .bg-slate-50,
+    .emergency .bg-indigo-50,
+    .emergency .bg-violet-50,
+    .emergency .bg-emerald-50,
+    .emergency .bg-amber-50,
+    .emergency .bg-red-50,
+    .emergency .bg-blue-50 {
+      background: #202020 !important;
+      color: #fff !important;
+    }
+
+    .emergency .priority-critical,
+    .emergency .priority-high,
+    .emergency .priority-medium,
+    .emergency .priority-low {
+      background: #171717 !important;
+      color: #fff !important;
+      border-color: #ffe600 !important;
+      border-left-color: #ffe600 !important;
+    }
+
+    .emergency .pill,
+    .emergency .tag {
+      background: #292929;
+      color: #fff;
+      border: 1px solid #777;
+    }
+
+    .emergency input,
+    .emergency textarea,
+    .emergency select {
+      background: #101010;
+      color: #fff;
+      border-color: #aaa;
+    }
+
+    .emergency input::placeholder,
+    .emergency textarea::placeholder {
+      color: #d0d0d0;
+    }
+
+    .emergency .resource-card:hover { border-color: #ffdf00; }
+
+    .emergency .text-red-700,
+    .emergency .text-red-800,
+    .emergency .text-red-600 {
+      color: #ffb4ab !important;
+    }
+
+    .emergency .text-emerald-700,
+    .emergency .text-green-700 {
+      color: #a8f0c6 !important;
+    }
+
+    .emergency .text-amber-800 { color: #ffe08a !important; }
+
+    .emergency .text-indigo-600,
+    .emergency .text-indigo-700,
+    .emergency .text-violet-600,
+    .emergency .text-blue-700 {
+      color: #ffe45c !important;
+    }
+
+    .emergency .border-indigo-100,
+    .emergency .border-indigo-200,
+    .emergency .border-gray-200,
+    .emergency .border-gray-100 {
+      border-color: #646464 !important;
+    }
+
+    .emergency .skeleton {
+      background: linear-gradient(90deg, #282828 25%, #444 50%, #282828 75%);
+      background-size: 200% 100%;
+    }
+
+    .emergency .brand-btn .icon { color: #090909; }
+
+    .emergency .live-dot {
+      background: #ffdf00;
+      box-shadow: 0 0 0 3px rgba(255,223,0,.15);
+    }
+
+    .emergency .priority-critical .pill {
+      background: #ffdf00;
+      color: #090909;
+      border-color: #ffdf00;
+    }
+
+    .emergency .tag-critical {
+      background: #ffdf00 !important;
+      color: #090909 !important;
+    }
+
+    .emergency-banner {
+      display: none;
+    }
+
+    .emergency .emergency-banner { display: block; }
+
+    .emergency-toggle[aria-pressed="true"] {
+      background: #ffdf00;
+      color: #090909;
+      border-color: #ffdf00;
+    }
+
+    .toast {
+      animation: toast-in .2s ease-out;
+    }
+
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 12px;
+      z-index: 100;
+      padding: 12px;
+      background: #fff;
+      color: #111;
+    }
+
+    .skip-link:focus { top: 12px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Emergency announcement -->
+  <div class="emergency-banner bg-yellow-300 text-black px-4 py-2 text-center text-sm font-extrabold" role="status">
+    ⚠ EMERGENCY MODE ACTIVE — HIGH-VISIBILITY DISPLAY
+  </div>
+
+  <!-- Sticky navigation -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="min-h-[72px] flex items-center justify-between gap-3">
+        <a href="#home" class="flex items-center gap-3 shrink-0" aria-label="ResistLink AI home">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="font-extrabold tracking-tight text-[17px] leading-5">ResistLink <span class="text-indigo-600">AI</span></div>
+            <div class="text-[10px] text-gray-500 tracking-[.13em] uppercase font-bold mt-1">Community first</div>
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-2 text-sm text-gray-600">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span class="font-semibold">Community network online</span>
+          <span class="text-gray-300 px-1">|</span>
+          <i data-lucide="map-pin" class="w-4 h-4"></i>
+          <span>Demo response zone</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="emergencyToggle"
+            class="emergency-toggle action-btn flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-bold"
+            type="button" aria-pressed="false">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+            <span id="emergencyLabel">Emergency Mode</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-9">
+
+    <!-- Hero -->
+    <section id="home" class="mb-7 lg:mb-9">
+      <div class="grid lg:grid-cols-[1.35fr_.65fr] gap-6 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full bg-indigo-50 text-indigo-800 px-3 py-1.5 text-xs font-bold mb-4">
+            <span class="live-dot"></span>
+            COMMUNITY RESILIENCE NETWORK
+          </div>
+          <h1 class="text-3xl sm:text-4xl lg:text-[46px] leading-[1.12] font-black tracking-tight max-w-3xl">
+            When it matters most,<br class="hidden sm:block">
+            <span class="text-indigo-600">we show up for each other.</span>
+          </h1>
+          <p class="text-gray-600 mt-4 leading-7 max-w-2xl text-sm sm:text-base">
+            One connected place to request essential supplies, find shelter,
+            offer support, and help your community recover — together.
+          </p>
+        </div>
+
+        <div class="surface soft-shadow p-5 sm:p-6">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="text-xs font-bold tracking-widest text-gray-500 uppercase">Community pulse</p>
+              <h2 class="text-lg font-extrabold mt-2">Every helping hand counts.</h2>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+              <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mt-5">
+            <div class="rounded-xl bg-gray-50 p-3">
+              <p id="statRequests" class="text-2xl font-black">03</p>
+              <p class="text-[11px] text-gray-600 mt-1">Requests</p>
+            </div>
+            <div class="rounded-xl bg-gray-50 p-3">
+              <p id="statSupplies" class="text-2xl font-black">02</p>
+              <p class="text-[11px] text-gray-600 mt-1">Supply posts</p>
+            </div>
+            <div class="rounded-xl bg-gray-50 p-3">
+              <p id="statCritical" class="text-2xl font-black text-red-700">01</p>
+              <p class="text-[11px] text-gray-600 mt-1">Urgent cases</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 mt-4 flex gap-2 items-center">
+            <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
+            Illustrative demo data, not verified live incidents.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mobile-first quick actions -->
+    <section aria-labelledby="quickActionsHeading" class="mb-7">
+      <h2 id="quickActionsHeading" class="font-extrabold text-lg mb-3">How can you help today?</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button id="needHelpBtn" type="button"
+          class="action-btn brand-btn rounded-2xl p-4 sm:p-5 flex items-center justify-between text-left min-h-[100px]">
+          <span>
+            <span class="flex items-center gap-2 text-lg font-extrabold">
+              <i data-lucide="life-buoy" class="w-5 h-5"></i>
+              I Need Help
+            </span>
+            <span class="block text-sm mt-2 opacity-90">Tell us what you need.</span>
+          </span>
+          <i data-lucide="arrow-up-right" class="w-6 h-6 shrink-0"></i>
+        </button>
+
+        <button id="supplyHelpBtn" type="button"
+          class="action-btn surface soft-shadow p-4 sm:p-5 flex items-center justify-between text-left min-h-[100px]">
+          <span>
+            <span class="flex items-center gap-2 text-lg font-extrabold">
+              <i data-lucide="hand-heart" class="w-5 h-5 text-emerald-700"></i>
+              I Can Supply Help
+            </span>
+            <span class="block text-sm mt-2 text-gray-600">Share what you can offer.</span>
+          </span>
+          <i data-lucide="arrow-up-right" class="w-6 h-6 shrink-0"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Resource overview -->
+    <section aria-labelledby="resourceHeading" class="mb-8">
+      <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+        <div>
+          <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Essential resources</p>
+          <h2 id="resourceHeading" class="text-xl font-extrabold mt-1">Community resource board</h2>
+        </div>
+        <span class="text-xs text-gray-500">Sample availability · Demo zone</span>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <button class="resource-card surface p-4 text-left" data-category="Water" type="button">
+          <div class="flex items-center justify-between gap-2">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
+              <i data-lucide="droplets" class="w-5 h-5"></i>
+            </div>
+            <span class="pill bg-emerald-50 text-emerald-800">2 posts</span>
+          </div>
+          <h3 class="font-extrabold mt-3">Clean Water</h3>
+          <p class="text-xs text-gray-600 mt-1">Drinking water & hydration</p>
+        </button>
+
+        <button class="resource-card surface p-4 text-left" data-category="Shelter" type="button">
+          <div class="flex items-center justify-between gap-2">
+            <div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center">
+              <i data-lucide="house" class="w-5 h-5"></i>
+            </div>
+            <span class="pill bg-amber-50 text-amber-800">1 need</span>
+          </div>
+          <h3 class="font-extrabold mt-3">Shelter</h3>
+          <p class="text-xs text-gray-600 mt-1">Safe places to stay</p>
+        </button>
+
+        <button class="resource-card surface p-4 text-left" data-category="Medical" type="button">
+          <div class="flex items-center justify-between gap-2">
+            <div class="w-10 h-10 rounded-xl bg-red-50 text-red-700 flex items-center justify-center">
+              <i data-lucide="heart-pulse" class="w-5 h-5"></i>
+            </div>
+            <span class="pill bg-red-50 text-red-800">1 urgent</span>
+          </div>
+          <h3 class="font-extrabold mt-3">Medical</h3>
+          <p class="text-xs text-gray-600 mt-1">Health & essential care</p>
+        </button>
+
+        <button class="resource-card surface p-4 text-left" data-category="Food" type="button">
+          <div class="flex items-center justify-between gap-2">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-700 flex items-center justify-center">
+              <i data-lucide="utensils" class="w-5 h-5"></i>
+            </div>
+            <span class="pill bg-emerald-50 text-emerald-800">2 posts</span>
+          </div>
+          <h3 class="font-extrabold mt-3">Food</h3>
+          <p class="text-xs text-gray-600 mt-1">Meals & essential groceries</p>
+        </button>
+      </div>
+    </section>
+
+    <!-- Main dashboard: reporting left, dynamic feed right -->
+    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,.92fr)_minmax(0,1.08fr)] gap-6 lg:gap-7 items-start">
+
+      <!-- Reporting panel -->
+      <section id="reportPanel" class="surface soft-shadow p-5 sm:p-6" aria-labelledby="reportHeading">
+        <div class="flex items-start justify-between gap-3 mb-5">
+          <div>
+            <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest">AI-assisted triage</p>
+            <h2 id="reportHeading" class="text-xl font-extrabold mt-1">Report a community need</h2>
+            <p class="text-sm text-gray-600 mt-2 leading-6">
+              Describe the situation. The demo analyzer will identify keywords
+              and suggest an initial priority.
+            </p>
+          </div>
+          <div class="w-11 h-11 shrink-0 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
+            <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <form id="reportForm" novalidate>
+          <label for="requestText" class="block text-sm font-bold mb-2">
+            What is happening? <span class="text-red-700">*</span>
+          </label>
+          <textarea id="requestText" name="request" required maxlength="1000"
+            rows="5"
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm leading-6 bg-white resize-y"
+            placeholder="Example: Power is out, and an oxygen machine battery is running low at 42 Maple St."
+            aria-describedby="requestHint charCount"></textarea>
+          <div class="flex justify-between items-start gap-2 mt-2">
+            <p id="requestHint" class="text-xs text-gray-500 leading-5">
+              Avoid sharing full names or unnecessary personal details.
+            </p>
+            <p id="charCount" class="text-xs text-gray-500 shrink-0">0/1000</p>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4 mt-5">
+            <div>
+              <label for="requestCategory" class="block text-sm font-bold mb-2">Need category</label>
+              <select id="requestCategory" class="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm bg-white">
+                <option value="Auto">Auto-detect</option>
+                <option value="Medical">Medical</option>
+                <option value="Power">Power / Electricity</option>
+                <option value="Shelter">Shelter</option>
+                <option value="Water">Water</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Other">Other / General</option>
+              </select>
+            </div>
+            <div>
+              <label for="urgency" class="block text-sm font-bold mb-2">Reported urgency</label>
+              <select id="urgency" class="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm bg-white">
+                <option value="auto">Let analyzer suggest</option>
+                <option value="critical">Critical — immediate danger</option>
+                <option value="high">High — urgent need</option>
+                <option value="medium">Medium — needed soon</option>
+                <option value="low">Low — non-urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-indigo-50 p-4 mt-5">
+            <div class="flex items-start gap-3">
+              <i data-lucide="sparkles" class="w-5 h-5 text-indigo-700 shrink-0 mt-0.5"></i>
+              <div>
+                <p class="text-sm font-bold text-indigo-900">AI Need-Triage Simulator</p>
+                <p class="text-xs text-indigo-900 mt-1 leading-5">
+                  Demo-only keyword analysis. Real emergency priority requires
+                  human verification and a trusted response workflow.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button id="analyzeBtn" type="submit"
+            class="brand-btn w-full rounded-xl py-3.5 px-4 mt-5 flex justify-center items-center gap-2 font-extrabold text-sm min-h-[50px]">
+            <i data-lucide="scan-search" class="w-5 h-5"></i>
+            <span>Analyze & Route</span>
+          </button>
+        </form>
+
+        <!-- Loading skeleton, fixed layout to avoid shifting -->
+        <div id="loadingPanel" class="hidden mt-5 border border-gray-200 rounded-xl p-4"
+          role="status" aria-live="polite" aria-label="Analyzing your report">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="skeleton w-10 h-10 rounded-xl"></div>
+            <div class="flex-1 space-y-2">
+              <div class="skeleton h-3 w-2/3"></div>
+              <div class="skeleton h-3 w-1/2"></div>
+            </div>
+          </div>
+          <div class="skeleton h-3 w-full mb-3"></div>
+          <div class="skeleton h-3 w-4/5 mb-3"></div>
+          <div class="skeleton h-9 w-full mt-4"></div>
+          <p class="text-xs text-gray-500 mt-3">Analyzing keywords and estimating priority…</p>
+        </div>
+
+        <div id="analysisResult" class="hidden mt-5 rounded-xl border border-gray-200 p-4"
+          aria-live="polite"></div>
+
+        <div class="border-t border-gray-100 mt-6 pt-5">
+          <div class="flex gap-3 items-start">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-amber-700 shrink-0"></i>
+            <p class="text-xs text-gray-600 leading-5">
+              <strong>In an immediate life-threatening emergency, contact your local emergency services.</strong>
+              This prototype does not dispatch responders, contact authorities, or verify reported needs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dynamic resource feed -->
+      <section id="feedSection" aria-labelledby="feedHeading" class="min-w-0">
+        <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+          <div>
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Local activity</p>
+            <h2 id="feedHeading" class="text-xl font-extrabold mt-1">Community response feed</h2>
+            <p class="text-sm text-gray-600 mt-2">Needs, offers and priority updates.</p>
+          </div>
+          <span class="pill bg-emerald-50 text-emerald-800">
+            <span class="live-dot"></span> Demo feed active
+          </span>
+        </div>
+
+        <div class="surface p-3 sm:p-4 mb-4">
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1 min-w-0">
+              <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+              <label class="sr-only" for="feedSearch">Search community feed</label>
+              <input id="feedSearch" type="search" placeholder="Search needs, tags or supplies..."
+                class="w-full border border-gray-200 rounded-xl pl-9 pr-3 py-2.5 text-sm bg-white">
+            </div>
+            <label class="sr-only" for="feedFilter">Filter community feed</label>
+            <select id="feedFilter" class="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white">
+              <option value="all">All activity</option>
+              <option value="need">Needs help</option>
+              <option value="supply">Supplies offered</option>
+              <option value="critical">Critical priority</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="feed" class="space-y-4" aria-live="polite" aria-relevant="additions">
+          <!-- Initial sample posts -->
+          <article class="resource-card surface p-4 sm:p-5" data-id="seed-1" data-kind="need" data-priority="high" data-tags="shelter family housing">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex flex-wrap gap-2">
+                <span class="pill bg-amber-50 text-amber-800">HIGH PRIORITY</span>
+                <span class="pill tag">Shelter</span>
+              </div>
+              <span class="text-xs text-gray-500 shrink-0">Demo · 8m ago</span>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <div class="w-10 h-10 shrink-0 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center">
+                <i data-lucide="house" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-extrabold">Temporary shelter needed</h3>
+                <p class="text-sm text-gray-600 leading-6 mt-2">
+                  A family needs a safe temporary place to stay after storm damage.
+                  A dry, accessible space would help.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-3">
+                  <span class="pill tag">Family support</span>
+                  <span class="pill tag">Accessible shelter</span>
+                </div>
+                <div class="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-gray-100">
+                  <span class="text-xs text-gray-500 flex gap-1 items-center">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Demo neighborhood
+                  </span>
+                  <button type="button" class="help-action text-indigo-700 text-sm font-extrabold" data-post="seed-1">
+                    Offer support →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="resource-card surface p-4 sm:p-5" data-id="seed-2" data-kind="supply" data-priority="low" data-tags="water food supplies">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex flex-wrap gap-2">
+                <span class="pill bg-emerald-50 text-emerald-800">SUPPLIES AVAILABLE</span>
+                <span class="pill tag">Water · Food</span>
+              </div>
+              <span class="text-xs text-gray-500 shrink-0">Demo · 15m ago</span>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <div class="w-10 h-10 shrink-0 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                <i data-lucide="package-check" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-extrabold">Drinking water & meal packs</h3>
+                <p class="text-sm text-gray-600 leading-6 mt-2">
+                  A community volunteer has listed sealed water bottles and
+                  ready-to-eat meal packs for local distribution.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-3">
+                  <span class="pill tag">Water bottles</span>
+                  <span class="pill tag">Meal packs</span>
+                </div>
+                <div class="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-gray-100">
+                  <span class="text-xs text-gray-500 flex gap-1 items-center">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Demo pickup point
+                  </span>
+                  <button type="button" class="help-action text-indigo-700 text-sm font-extrabold" data-post="seed-2">
+                    View offer →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="resource-card surface p-4 sm:p-5" data-id="seed-3" data-kind="need" data-priority="medium" data-tags="power charging communication">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex flex-wrap gap-2">
+                <span class="pill bg-blue-50 text-blue-800">MEDIUM PRIORITY</span>
+                <span class="pill tag">Power</span>
+              </div>
+              <span class="text-xs text-gray-500 shrink-0">Demo · 22m ago</span>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <div class="w-10 h-10 shrink-0 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center">
+                <i data-lucide="battery-charging" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-extrabold">Phone charging access needed</h3>
+                <p class="text-sm text-gray-600 leading-6 mt-2">
+                  Residents are looking for a safe charging point to keep phones
+                  available for family communication.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-3">
+                  <span class="pill tag">Charging</span>
+                  <span class="pill tag">Communication</span>
+                </div>
+                <div class="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-gray-100">
+                  <span class="text-xs text-gray-500 flex gap-1 items-center">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Demo neighborhood
+                  </span>
+                  <button type="button" class="help-action text-indigo-700 text-sm font-extrabold" data-post="seed-3">
+                    Offer support →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div id="emptyState" class="hidden surface p-8 text-center mt-4">
+          <i data-lucide="search-x" class="w-9 h-9 mx-auto text-gray-500"></i>
+          <p class="font-bold mt-3">No matching activity</p>
+          <p class="text-sm text-gray-600 mt-1">Try another search or filter.</p>
+          <button id="clearFilters" type="button" class="text-indigo-700 font-bold text-sm mt-3">Clear filters</button>
+        </div>
+
+        <p class="text-xs text-gray-500 mt-4 leading-5">
+          All initial feed entries are fictional examples for demonstration.
+          Availability, locations and volunteer offers have not been verified.
+        </p>
+      </section>
+    </div>
+
+    <!-- Accessibility and inclusion -->
+    <section class="surface soft-shadow p-5 sm:p-7 mt-8" aria-labelledby="inclusionHeading">
+      <div class="grid md:grid-cols-[auto_1fr] gap-4 md:gap-6">
+        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
+          <i data-lucide="accessibility" class="w-7 h-7"></i>
+        </div>
+        <div>
+          <h2 id="inclusionHeading" class="text-xl font-extrabold">Help should reach everyone.</h2>
+          <p class="text-sm text-gray-600 mt-2 leading-6 max-w-3xl">
+            ResistLink AI is designed around readable contrast, keyboard navigation,
+            reduced-motion preferences and mobile-friendly controls. A full deployment
+            should also support local languages, screen-reader-tested workflows,
+            accessible pickup locations and offline reporting.
+          </p>
+          <div class="grid sm:grid-cols-3 gap-3 mt-5">
+            <div class="rounded-xl bg-gray-50 p-4">
+              <i data-lucide="eye" class="w-5 h-5 mb-2 text-indigo-700"></i>
+              <p class="text-sm font-bold">High visibility</p>
+              <p class="text-xs text-gray-600 mt-1 leading-5">Emergency mode with bold black and yellow styling.</p>
+            </div>
+            <div class="rounded-xl bg-gray-50 p-4">
+              <i data-lucide="keyboard" class="w-5 h-5 mb-2 text-indigo-700"></i>
+              <p class="text-sm font-bold">Keyboard friendly</p>
+              <p class="text-xs text-gray-600 mt-1 leading-5">Semantic controls, focus indicators and skip navigation.</p>
+            </div>
+            <div class="rounded-xl bg-gray-50 p-4">
+              <i data-lucide="heart-handshake" class="w-5 h-5 mb-2 text-indigo-700"></i>
+              <p class="text-sm font-bold">People first</p>
+              <p class="text-xs text-gray-600 mt-1 leading-5">Clear actions and accessible community support.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-gray-200 bg-white mt-10">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between gap-3 text-xs text-gray-600">
+      <p class="font-bold">ResistLink AI · Stronger communities, together.</p>
+      <p>Hackathon prototype · Simulated AI · No live dispatch or verified incident data.</p>
+    </div>
+  </footer>
+
+  <!-- Accessible toast -->
+  <div id="toastRegion" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-50"
+    aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Supply form modal -->
+  <div id="supplyModal" class="hidden fixed inset-0 z-50 bg-black/60 p-4 flex items-center justify-center"
+    role="dialog" aria-modal="true" aria-labelledby="supplyModalTitle">
+    <div class="surface w-full max-w-lg p-5 sm:p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-xs text-indigo-600 font-bold tracking-widest uppercase">Community contribution</p>
+          <h2 id="supplyModalTitle" class="text-xl font-extrabold mt-1">Offer supplies or support</h2>
+        </div>
+        <button id="closeSupply" type="button" class="p-2 rounded-lg hover:bg-gray-100"
+          aria-label="Close supply form">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form id="supplyForm" class="mt-5 space-y-4">
+        <div>
+          <label for="supplyTitle" class="block text-sm font-bold mb-2">What can you offer?</label>
+          <input id="supplyTitle" required maxlength="100"
+            class="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm"
+            placeholder="e.g. 10 drinking water packs">
+        </div>
+        <div>
+          <label for="supplyCategory" class="block text-sm font-bold mb-2">Resource type</label>
+          <select id="supplyCategory" class="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm">
+            <option>Water</option>
+            <option>Food</option>
+            <option>Shelter</option>
+            <option>Medical</option>
+            <option>Power</option>
+            <option>Transport</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="supplyDetails" class="block text-sm font-bold mb-2">Details (optional)</label>
+          <textarea id="supplyDetails" maxlength="400" rows="3"
+            class="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm"
+            placeholder="Quantity, accessibility or safe pickup details"></textarea>
+        </div>
+        <p class="text-xs text-gray-500 leading-5">Demo only: do not enter private contact details. This form does not arrange real collection.</p>
+        <button type="submit" class="brand-btn w-full rounded-xl py-3 font-extrabold text-sm">Publish supply offer</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Offer support dialog -->
+  <div id="supportModal" class="hidden fixed inset-0 z-50 bg-black/60 p-4 flex items-center justify-center"
+    role="dialog" aria-modal="true" aria-labelledby="supportModalTitle">
+    <div class="surface w-full max-w-md p-6">
+      <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+        <i data-lucide="hand-heart" class="w-6 h-6"></i>
+      </div>
+      <h2 id="supportModalTitle" class="text-xl font-extrabold mt-4">Help your community</h2>
+      <p id="supportDescription" class="text-sm text-gray-600 leading-6 mt-2"></p>
+      <p class="text-xs text-gray-500 mt-3">This demo records your intent locally on the page only. It does not notify the requester.</p>
+      <div class="flex gap-3 mt-5">
+        <button id="confirmSupport" type="button" class="brand-btn rounded-xl py-3 px-4 font-bold text-sm flex-1">Record demo offer</button>
+        <button id="cancelSupport" type="button" class="border border-gray-300 rounded-xl py-3 px-4 font-bold text-sm">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+    const form = $("#reportForm");
+    const requestText = $("#requestText");
+    const categorySelect = $("#requestCategory");
+    const urgencySelect = $("#urgency");
+    const analyzeBtn = $("#analyzeBtn");
+    const loadingPanel = $("#loadingPanel");
+    const analysisResult = $("#analysisResult");
+    const feed = $("#feed");
+    const feedSearch = $("#feedSearch");
+    const feedFilter = $("#feedFilter");
+    const toastRegion = $("#toastRegion");
+
+    let nextId = 4;
+    let analysisTimer = null;
+    let activeSupportPost = null;
+    let previousFocus = null;
+    let toastTimer = null;
+
+    const priorityDetails = {
+      critical: {
+        label: "CRITICAL",
+        score: 95,
+        className: "priority-critical",
+        badge: "bg-red-100 text-red-800",
+        icon: "alert-triangle"
+      },
+      high: {
+        label: "HIGH",
+        score: 75,
+        className: "priority-high",
+        badge: "bg-amber-100 text-amber-900",
+        icon: "alert-circle"
+      },
+      medium: {
+        label: "MEDIUM",
+        score: 50,
+        className: "priority-medium",
+        badge: "bg-blue-100 text-blue-800",
+        icon: "clock-3"
+      },
+      low: {
+        label: "LOW",
+        score: 20,
+        className: "priority-low",
+        badge: "bg-emerald-100 text-emerald-800",
+        icon: "check-circle"
+      }
+    };
+
+    // Keyword-based simulation, not a trained or validated AI model.
+    const keywordGroups = [
+      {
+        name: "Medical",
+        words: ["oxygen", "medical", "medicine", "medication", "insulin",
+          "dialysis", "ambulance", "injured", "injury", "bleeding",
+          "breathing", "hospital", "doctor", "health", "urgent care",
+          "life support", "heart attack", "unconscious", "seizure"]
+      },
+      {
+        name: "Power",
+        words: ["power", "electricity", "electric", "blackout", "outage",
+          "battery", "generator", "charging", "charger", "oxygen machine"]
+      },
+      {
+        name: "Shelter",
+        words: ["shelter", "homeless", "housing", "roof", "evacuate",
+          "evacuation", "flooded home", "place to stay", "displaced"]
+      },
+      {
+        name: "Water",
+        words: ["water", "thirsty", "hydration", "drinking water", "dehydrated"]
+      },
+      {
+        name: "Food",
+        words: ["food", "hungry", "meal", "meals", "groceries", "baby formula",
+          "food shortage", "milk"]
+      },
+      {
+        name: "Transport",
+        words: ["transport", "transportation", "ride", "stranded", "pickup",
+          "vehicle", "wheelchair access"]
+      }
+    ];
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function detectTags(text) {
+      const normalized = text.toLowerCase();
+      const matches = keywordGroups
+        .filter(group => group.words.some(word => normalized.includes(word)))
+        .map(group => group.name);
+
+      return matches.length ? matches : ["General"];
+    }
+
+    function calculatePriority(text, selectedUrgency, tags) {
+      if (selectedUrgency !== "auto") return selectedUrgency;
+
+      const t = text.toLowerCase();
+
+      const criticalWords = [
+        "oxygen", "life support", "can't breathe", "cannot breathe",
+        "not breathing", "unconscious", "heart attack", "severe bleeding",
+        "severe injury", "life threatening", "life-threatening",
+        "battery low", "battery is low", "running low", "about to die",
+        "trapped", "building collapse", "gas leak"
+      ];
+
+      const highWords = [
+        "urgent", "emergency", "injured", "medicine", "insulin",
+        "no drinking water", "no food", "no shelter", "evacuation",
+        "flooded", "stranded", "no power", "power is out",
+        "power out", "medical"
+      ];
+
+      const mediumWords = [
+        "charging", "blanket", "groceries", "transport", "repair",
+        "supplies", "water", "food", "shelter", "power"
+      ];
+
+      if (criticalWords.some(word => t.includes(word))) return "critical";
+      if (highWords.some(word => t.includes(word))) return "high";
+      if (mediumWords.some(word => t.includes(word))) return "medium";
+      return "low";
+    }
+
+    function analyzeRequest(text) {
+      const tags = detectTags(text);
+      const priority = calculatePriority(text, urgencySelect.value, tags);
+
+      // An explicitly selected category is added without removing detected tags.
+      const chosenCategory = categorySelect.value;
+      if (chosenCategory !== "Auto" && !tags.includes(chosenCategory)) {
+        tags.unshift(chosenCategory);
+      }
+
+      return { tags, priority };
+    }
+
+    function showToast(message, type = "info") {
+      clearTimeout(toastTimer);
+
+      const icon = type === "success" ? "check-circle" :
+        type === "error" ? "alert-circle" : "info";
+
+      const border = type === "error" ? "border-red-300" :
+        type === "success" ? "border-emerald-300" : "border-gray-200";
+
+      toastRegion.innerHTML = `
+        <div class="toast surface soft-shadow ${border} p-4 flex gap-3 items-start" role="status">
+          <i data-lucide="${icon}" class="w-5 h-5 shrink-0 mt-0.5"></i>
+          <p class="text-sm font-semibold leading-5 flex-1">${escapeHTML(message)}</p>
+          <button type="button" class="dismissToast p-1 rounded" aria-label="Dismiss notification">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>`;
+
+      if (window.lucide) lucide.createIcons();
+
+      $(".dismissToast", toastRegion)?.addEventListener("click", () => {
+        clearTimeout(toastTimer);
+        toastRegion.replaceChildren();
+      });
+
+      toastTimer = setTimeout(() => toastRegion.replaceChildren(), 5000);
+    }
+
+    function updateStats() {
+      const posts = $$("#feed > article");
+
+      const needs = posts.filter(post => post.dataset.kind === "need").length;
+      const supplies = posts.filter(post => post.dataset.kind === "supply").length;
+      const critical = posts.filter(post =>
+        post.dataset.kind === "need" && post.dataset.priority === "critical"
+      ).length;
+
+      $("#statRequests").textContent = String(needs).padStart(2, "0");
+      $("#statSupplies").textContent = String(supplies).padStart(2, "0");
+      $("#statCritical").textContent = String(critical).padStart(2, "0");
+    }
+
+    function iconForTag(tags) {
+      const map = {
+        Medical: "heart-pulse",
+        Power: "battery-charging",
+        Shelter: "house",
+        Water: "droplets",
+        Food: "utensils",
+        Transport: "car-front",
+        General: "hand-heart",
+        Other: "hand-heart"
+      };
+
+      return map[tags.find(tag => map[tag])] || "hand-heart";
+    }
+
+    function buildTagPills(tags) {
+      return tags.map(tag =>
+        `<span class="pill tag">${escapeHTML(tag)}</span>`
+      ).join("");
+    }
+
+    function createNeedCard(text, tags, priority, id) {
+      const detail = priorityDetails[priority];
+      const now = new Date().toLocaleTimeString([], {
+        hour: "2-digit", minute: "2-digit"
+      });
+
+      const card = document.createElement("article");
+      card.className = `resource-card surface ${detail.className} p-4 sm:p-5`;
+      card.dataset.id = id;
+      card.dataset.kind = "need";
+      card.dataset.priority = priority;
+      card.dataset.tags = tags.join(" ").toLowerCase();
+
+      card.innerHTML = `
+        <div class="flex justify-between items-start gap-3">
+          <div class="flex flex-wrap gap-2">
+            <span class="pill ${detail.badge}">AI PRIORITY: ${detail.label}</span>
+            ${buildTagPills(tags)}
+          </div>
+          <span class="text-xs text-gray-500 shrink-0">Demo · ${escapeHTML(now)}</span>
+        </div>
+
+        <div class="mt-4 flex gap-3">
+          <div class="w-10 h-10 shrink-0 rounded-xl bg-red-50 text-red-700 flex items-center justify-center">
+            <i data-lucide="${detail.icon}" class="w-5 h-5"></i>
+          </div>
+
+          <div class="min-w-0 flex-1">
+            <h3 class="font-extrabold">Community assistance requested</h3>
+            <p class="text-sm text-gray-700 leading-6 mt-2">${escapeHTML(text)}</p>
+
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="pill tag">Simulated score: ${detail.score}/100</span>
+              <span class="pill tag">Human verification needed</span>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-gray-200 flex flex-wrap justify-between items-center gap-3">
+              <span class="text-xs text-gray-600 flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                Location not verified
+              </span>
+              <button type="button" class="help-action text-indigo-700 font-extrabold text-sm" data-post="${id}">
+                Offer support →
+              </button>
+            </div>
+          </div>
+        </div>`;
+
+      return card;
+    }
+
+    function createSupplyCard(title, category, details, id) {
+      const card = document.createElement("article");
+      card.className = "resource-card surface p-4 sm:p-5";
+      card.dataset.id = id;
+      card.dataset.kind = "supply";
+      card.dataset.priority = "low";
+      card.dataset.tags = `${category} supplies ${title}`.toLowerCase();
+
+      card.innerHTML = `
+        <div class="flex justify-between items-start gap-3">
+          <div class="flex flex-wrap gap-2">
+            <span class="pill bg-emerald-50 text-emerald-800">SUPPLIES AVAILABLE</span>
+            <span class="pill tag">${escapeHTML(category)}</span>
+          </div>
+          <span class="text-xs text-gray-500 shrink-0">Demo · Just now</span>
+        </div>
+        <div class="mt-4 flex gap-3">
+          <div class="w-10 h-10 shrink-0 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <i data-lucide="${iconForTag([category])}" class="w-5 h-5"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <h3 class="font-extrabold">${escapeHTML(title)}</h3>
+            <p class="text-sm text-gray-600 leading-6 mt-2">
+              ${escapeHTML(details || "A community member has offered this resource in the demo network.")}
+            </p>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center gap-3">
+              <span class="text-xs text-gray-500">Location not provided</span>
+              <span class="pill tag">Demo offer</span>
+            </div>
+          </div>
+        </div>`;
+
+      return card;
+    }
+
+    function applyFilters() {
+      const query = feedSearch.value.trim().toLowerCase();
+      const filter = feedFilter.value;
+      let visible = 0;
+
+      $$("#feed > article").forEach(card => {
+        const matchesSearch = !query ||
+          card.textContent.toLowerCase().includes(query) ||
+          card.dataset.tags.includes(query);
+
+        const matchesFilter =
+          filter === "all" ||
+          (filter === "need" && card.dataset.kind === "need") ||
+          (filter === "supply" && card.dataset.kind === "supply") ||
+          (filter === "critical" &&
+            card.dataset.kind === "need" &&
+            card.dataset.priority === "critical");
+
+        const show = matchesSearch && matchesFilter;
+        card.classList.toggle("hidden", !show);
+        if (show) visible++;
+      });
+
+      $("#emptyState").classList.toggle("hidden", visible > 0);
+    }
+
+    function addCardToFeed(card) {
+      feed.prepend(card);
+      applyFilters();
+      updateStats();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function finishAnalysis(text) {
+      const result = analyzeRequest(text);
+      const id = `request-${nextId++}`;
+      const detail = priorityDetails[result.priority];
+
+      loadingPanel.classList.add("hidden");
+      analyzeBtn.disabled = false;
+      analyzeBtn.innerHTML = `
+        <i data-lucide="scan-search" class="w-5 h-5"></i>
+        <span>Analyze & Route</span>`;
+
+      const card = createNeedCard(text, result.tags, result.priority, id);
+      addCardToFeed(card);
+
+      analysisResult.classList.remove("hidden");
+      analysisResult.innerHTML = `
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-extrabold">Demo analysis complete</p>
+            <p class="text-sm text-gray-600 mt-1 leading-5">
+              A simulated triage card has been added to the top of the feed.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-3">
+              <span class="pill ${detail.badge}">AI PRIORITY: ${detail.label}</span>
+              <span class="pill tag">Score: ${detail.score}/100</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-3 leading-5">
+              Suggested tags: ${result.tags.map(escapeHTML).join(", ")}.
+              This score is a heuristic demo, not a validated risk assessment.
+            </p>
+            <button id="viewNewCard" type="button"
+              class="text-sm text-indigo-700 font-extrabold mt-3">
+              View new feed card →
+            </button>
+          </div>
+        </div>`;
+
+      $("#viewNewCard").addEventListener("click", () => {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        card.setAttribute("tabindex", "-1");
+        card.focus({ preventScroll: true });
+      });
+
+      if (window.lucide) lucide.createIcons();
+      showToast("Your demo request has been added to the community feed.", "success");
+    }
+
+    // Main triage flow: validate, skeleton, simulate one-second processing.
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const text = requestText.value.trim();
+
+      if (!text) {
+        requestText.focus();
+        showToast("Please describe the community need before analyzing.", "error");
+        return;
+      }
+
+      if (text.length < 8) {
+        requestText.focus();
+        showToast("Please add a little more detail to the request.", "error");
+        return;
+      }
+
+      if (analysisTimer) clearTimeout(analysisTimer);
+
+      analysisResult.classList.add("hidden");
+      loadingPanel.classList.remove("hidden");
+      analyzeBtn.disabled = true;
+      analyzeBtn.innerHTML = `
+        <span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" aria-hidden="true"></span>
+        <span>Analyzing request…</span>`;
+
+      analysisTimer = setTimeout(() => {
+        finishAnalysis(text);
+        analysisTimer = null;
+      }, 1000);
+    });
+
+    requestText.addEventListener("input", () => {
+      $("#charCount").textContent = `${requestText.value.length}/1000`;
+    });
+
+    // Quick actions scroll the user directly to the relevant workflow.
+    $("#needHelpBtn").addEventListener("click", () => {
+      $("#reportPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => requestText.focus({ preventScroll: true }), 250);
+    });
+
+    const supplyModal = $("#supplyModal");
+    const supportModal = $("#supportModal");
+
+    function openModal(modal) {
+      previousFocus = document.activeElement;
+      modal.classList.remove("hidden");
+      const first = $("input, textarea, select, button", modal);
+      if (first) first.focus();
+    }
+
+    function closeModal(modal) {
+      modal.classList.add("hidden");
+      if (previousFocus && typeof previousFocus.focus === "function") {
+        previousFocus.focus();
+      }
+    }
+
+    $("#supplyHelpBtn").addEventListener("click", () => openModal(supplyModal));
+    $("#closeSupply").addEventListener("click", () => closeModal(supplyModal));
+
+    supplyModal.addEventListener("click", event => {
+      if (event.target === supplyModal) closeModal(supplyModal);
+    });
+
+    $("#supplyForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const title = $("#supplyTitle").value.trim();
+      const category = $("#supplyCategory").value;
+      const details = $("#supplyDetails").value.trim();
+
+      if (!title) {
+        $("#supplyTitle").focus();
+        return;
+      }
+
+      const card = createSupplyCard(title, category, details, `supply-${nextId++}`);
+      closeModal(supplyModal);
+      addCardToFeed(card);
+      $("#supplyForm").reset();
+      showToast("Your sample supply offer is now in the demo feed.", "success");
+      $("#feedSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    // Support actions are local demonstration interactions only.
+    feed.addEventListener("click", event => {
+      const button = event.target.closest(".help-action");
+      if (!button) return;
+
+      const card = $(`#feed > article[data-id="${CSS.escape(button.dataset.post)}"]`);
+      if (!card) return;
+
+      activeSupportPost = card;
+      $("#supportDescription").textContent =
+        `You selected: ${card.querySelector("h3")?.textContent || "Community post"}. ` +
+        "Confirm to record a local demo response. No real person will be contacted.";
+
+      openModal(supportModal);
+    });
+
+    $("#confirmSupport").addEventListener("click", () => {
+      if (!activeSupportPost) return;
+
+      const title = activeSupportPost.querySelector("h3")?.textContent || "Community post";
+      const id = activeSupportPost.dataset.id;
+
+      let status = $(`[data-support-status="${CSS.escape(id)}"]`, activeSupportPost);
+
+      if (!status) {
+        status = document.createElement("p");
+        status.dataset.supportStatus = id;
+        status.className = "text-xs font-bold text-emerald-700 mt-3";
+        activeSupportPost.querySelector(".min-w-0.flex-1")?.append(status);
+      }
+
+      status.textContent = "✓ Demo support interest recorded locally";
+      closeModal(supportModal);
+      activeSupportPost = null;
+      showToast(`Demo response recorded for "${title}". No notification was sent.`, "success");
+    });
+
+    $("#cancelSupport").addEventListener("click", () => {
+      activeSupportPost = null;
+      closeModal(supportModal);
+    });
+
+    supportModal.addEventListener("click", event => {
+      if (event.target === supportModal) {
+        activeSupportPost = null;
+        closeModal(supportModal);
+      }
+    });
+
+    // Escape closes dialogs and restores focus.
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        if (!supplyModal.classList.contains("hidden")) closeModal(supplyModal);
+        if (!supportModal.classList.contains("hidden")) {
+          activeSupportPost = null;
+          closeModal(supportModal);
+        }
+      }
+    });
+
+    // Resource tiles filter the feed by category.
+    $$("[data-category]").forEach(button => {
+      button.addEventListener("click", () => {
+        feedSearch.value = button.dataset.category;
+        feedFilter.value = "all";
+        applyFilters();
+        $("#feedSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    feedSearch.addEventListener("input", applyFilters);
+    feedFilter.addEventListener("change", applyFilters);
+
+    $("#clearFilters").addEventListener("click", () => {
+      feedSearch.value = "";
+      feedFilter.value = "all";
+      applyFilters();
+      feedSearch.focus();
+    });
+
+    // High-visibility emergency theme.
+    const emergencyToggle = $("#emergencyToggle");
+
+    emergencyToggle.addEventListener("click", () => {
+      const enabled = !document.body.classList.contains("emergency");
+
+      document.body.classList.toggle("emergency", enabled);
+      emergencyToggle.setAttribute("aria-pressed", String(enabled));
+      $("#emergencyLabel").textContent = enabled
+        ? "Exit Emergency Mode"
+        : "Emergency Mode";
+
+      document.querySelector('meta[name="theme-color"]')
+        .setAttribute("content", enabled ? "#090909" : "#f7f8fc");
+
+      showToast(
+        enabled
+          ? "High-visibility emergency display enabled."
+          : "Standard display restored.",
+        "success"
+      );
+    });
+
+    // Initialize icons and live counters.
+    if (window.lucide) lucide.createIcons();
+    updateStats();
+    applyFilters();
+  </script>
+</body>
+</html>
